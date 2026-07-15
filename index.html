@@ -1,186 +1,57 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
-<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>ATPL/CPL Prep — Cockpit Study</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="data/style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DGCA Exam Bank &middot; CPL/ATPL Question Practice</title>
+<meta name="description" content="Practice and test yourself on DGCA CPL/ATPL question banks.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
 <header class="topbar">
-  <div class="topbar-brand">
-    <div class="brand-icon">✈</div>
-    <div class="brand-name">Cockpit Study</div>
-    <div class="brand-tag">CPL / ATPL</div>
-  </div>
-  <div class="topbar-right">
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input type="text" id="globalSearch" placeholder="Search questions…" oninput="handleSearch(this.value)" />
+  <a href="#/" class="brand" style="cursor:pointer;">
+    <div class="brand-mark">DG</div>
+    <div>
+      DGCA Exam Bank
+      <small>CPL / ATPL Practice</small>
     </div>
-    <div class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
-      <span class="theme-label" id="themeLabel">DARK</span>
-      <div class="toggle-track">
-        <div class="toggle-thumb"></div>
-        <div class="toggle-icons"><span>🌙</span><span>☀️</span></div>
-      </div>
-    </div>
+  </a>
+  <div class="topbar-actions">
+    <a href="https://dgca-rtr-simulator.vercel.app/login.html" target="_blank" rel="noopener" class="btn btn-ghost btn-sm" title="Open RTR Simulator">RTR &nearr;</a>
+    <a href="#/stats" class="icon-btn" title="Progress">📈</a>
+    <a href="#/bookmarks" class="icon-btn" title="Bookmarks">★</a>
+    <a href="#/mistakes" class="icon-btn" title="Revise mistakes">⟲</a>
   </div>
 </header>
-<nav class="nav">
-  <button class="nav-btn active" onclick="goPage('dashboard', this)"><span class="nav-icon">🏠</span> Home</button>
-  <button class="nav-btn" onclick="goPage('qa', this)"><span class="nav-icon">❓</span> Q&A Bank</button>
-  <button class="nav-btn" onclick="goPage('flash', this)"><span class="nav-icon">🃏</span> Flashcards</button>
-  <button class="nav-btn" onclick="goPage('test', this)"><span class="nav-icon">📝</span> Mock Test</button>
-  <button class="nav-btn" onclick="goPage('notes', this)"><span class="nav-icon">📚</span> Notes</button>
-  <button class="nav-btn" onclick="goPage('airline', this)"><span class="nav-icon">✈️</span> Airline Interview</button>
-  <button class="nav-btn" onclick="goPage('sim', this)"><span class="nav-icon">🎮</span> Sim / Type Rating</button>
-</nav>
-<main class="main">
-<div class="page search-results-page" id="page-search">
-  <div class="page-header"><div class="page-title">Search Results</div><div class="search-result-count" id="searchCount"></div></div>
-  <div class="qa-list" id="searchList"></div>
-</div>
-<div class="page active" id="page-dashboard">
-  <div class="dash-header"><div class="dash-title">Ready for Takeoff?</div><div class="dash-sub">CPL / ATPL GROUND SCHOOL PREP PLATFORM</div></div>
-  <div class="dash-stats">
-    <div class="stat-card"><div class="stat-label">Total Questions</div><div class="stat-value" id="statTotal">0</div><div class="stat-sub">across all subjects</div></div>
-    <div class="stat-card"><div class="stat-label">Subjects</div><div class="stat-value" id="statSubjects">0</div><div class="stat-sub">topic areas</div></div>
-    <div class="stat-card"><div class="stat-label">Flashcards Known</div><div class="stat-value" id="statKnown">0</div><div class="stat-sub">this session</div></div>
-    <div class="stat-card"><div class="stat-label">Tests Taken</div><div class="stat-value" id="statTests">0</div><div class="stat-sub">this session</div></div>
-  </div>
-  <div class="page-header" style="margin-top:8px;"><div class="page-title" style="font-size:18px;">Study Modes</div><div class="page-sub">USE THESE FOR MIXED / ALL-SUBJECT PRACTICE</div></div>
-  <div class="mode-cards">
-    <div class="mode-card" onclick="goPage('qa',document.querySelector('[onclick*=\'qa\']'))"><div class="mode-card-icon">❓</div><div class="mode-card-title">Q&amp;A Bank</div><div class="mode-card-desc">Browse all questions with full answers. Filter by subject.</div><div class="mode-card-count" id="mcQa"></div></div>
-    <div class="mode-card" onclick="goPage('flash',document.querySelector('[onclick*=\'flash\']'))"><div class="mode-card-icon">🃏</div><div class="mode-card-title">Flashcards</div><div class="mode-card-desc">Flip-card study mode. Mark known or review again.</div><div class="mode-card-count" id="mcFlash"></div></div>
-    <div class="mode-card" onclick="goPage('test',document.querySelector('[onclick*=\'test\']'))"><div class="mode-card-icon">📝</div><div class="mode-card-title">Mock Test</div><div class="mode-card-desc">Timed MCQ quiz. Get your score and review answers.</div><div class="mode-card-count" id="mcTest"></div></div>
-    <div class="mode-card" onclick="goPage('notes',document.querySelector('[onclick*=\'notes\']'))"><div class="mode-card-icon">📚</div><div class="mode-card-title">Study Notes</div><div class="mode-card-desc">Detailed topic notes per subject. Add your own HTML content.</div></div>
-    <div class="mode-card" onclick="goPage('airline',document.querySelector('[onclick*=\'airline\']'))"><div class="mode-card-icon">✈️</div><div class="mode-card-title">Airline Interview</div><div class="mode-card-desc">HR + technical questions asked by airlines.</div><div class="mode-card-count" id="mcAirline"></div></div>
-    <div class="mode-card" onclick="goPage('sim',document.querySelector('[onclick*=\'sim\']'))"><div class="mode-card-icon">🎮</div><div class="mode-card-title">Sim / Type Rating</div><div class="mode-card-desc">Simulator checks, type rating prep, oral exam questions.</div><div class="mode-card-count" id="mcSim"></div></div>
-  </div>
-  <div class="page-header" style="margin-top:36px;"><div class="page-title" style="font-size:18px;">Subjects</div><div class="page-sub">EACH SUBJECT HAS ITS OWN FULL STUDY PAGE — NOTES, Q&amp;A, FLASHCARDS &amp; MOCK TEST</div></div>
-  <div class="mode-cards" id="subjectCards"></div>
-</div>
 
-<div class="page" id="page-qa">
-  <div class="page-header"><div class="page-title">Q&amp;A Bank</div><div class="page-sub">CLICK A QUESTION TO REVEAL THE ANSWER</div></div>
-  <div class="filter-bar" id="qaFilter"></div>
-  <div class="qa-list" id="qaList"></div>
-</div>
+<nav class="breadcrumbs" id="breadcrumbs"></nav>
 
-<div class="page" id="page-flash">
-  <div class="page-header"><div class="page-title">Flashcards</div><div class="page-sub">CLICK THE CARD TO FLIP IT</div></div>
-  <div class="flash-controls">
-    <div class="filter-bar" id="flashFilter" style="margin-bottom:0;"></div>
-    <div class="flash-progress-text" id="flashProgressText"></div>
-  </div>
-  <div class="flash-arena">
-    <div class="flash-progress-bar"><div class="flash-progress-fill" id="flashBar"></div></div>
-    <div class="flash-card-wrap" onclick="flipCard()">
-      <div class="flash-card" id="flashCard">
-        <div class="flash-face flash-front">
-          <div class="flash-subject-badge" id="flashSubBadge"></div>
-          <div class="flash-label">Question</div>
-          <div class="flash-text" id="flashQ"></div>
-          <div class="flash-tap-hint">tap to reveal answer</div>
-        </div>
-        <div class="flash-face flash-back">
-          <div class="flash-label">Answer</div>
-          <div class="flash-answer-text" id="flashA"></div>
-        </div>
-      </div>
-    </div>
-    <div class="flash-actions">
-      <button class="flash-btn flash-btn-again" onclick="markCard(false)">↩ Review Again</button>
-      <button class="flash-btn flash-btn-next" onclick="nextCard()">Skip →</button>
-      <button class="flash-btn flash-btn-known" onclick="markCard(true)">✓ Known</button>
-    </div>
-  </div>
-</div>
+<main id="app"></main>
 
-<div class="page" id="page-test">
-  <div class="page-header"><div class="page-title">Mock Test</div><div class="page-sub">TIMED MCQ PRACTICE EXAM</div></div>
-  <div class="test-setup" id="testSetup">
-    <h2>Configure Test</h2>
-    <div class="form-row"><label class="form-label">Subject</label><select class="form-select" id="testSubjectSelect"></select></div>
-    <div class="form-row"><label class="form-label">Number of Questions</label>
-      <select class="form-select" id="testNumQ">
-        <option value="5">5 questions</option><option value="10" selected>10 questions</option>
-        <option value="20">20 questions</option><option value="all">All available</option>
-      </select>
-    </div>
-    <div class="form-row"><label class="form-label">Time per Question (seconds)</label>
-      <select class="form-select" id="testTimeQ">
-        <option value="0">No timer</option><option value="30">30 seconds</option>
-        <option value="60" selected>60 seconds</option><option value="90">90 seconds</option><option value="120">2 minutes</option>
-      </select>
-    </div>
-    <button class="start-btn" onclick="startTest()">Start Test →</button>
-  </div>
-  <div class="test-running" id="testRunning">
-    <div class="test-header"><div class="test-meta" id="testMeta"></div><div class="test-timer" id="testTimer"></div></div>
-    <div class="test-progress-bar"><div class="test-progress-fill" id="testBar"></div></div>
-    <div class="test-question-card">
-      <div class="test-qnum" id="testQNum"></div><div class="test-qtext" id="testQText"></div>
-      <div class="test-options" id="testOptions"></div><div class="test-explanation" id="testExplanation"></div>
-    </div>
-    <div class="test-nav">
-      <button class="test-nav-btn" onclick="endTestEarly()">End Test</button>
-      <button class="test-nav-btn primary" id="testNextBtn" onclick="nextTestQ()" disabled>Next →</button>
-    </div>
-  </div>
-  <div class="test-result" id="testResult">
-    <div class="result-score" id="resultScore"></div><div class="result-label">SCORE</div>
-    <div class="result-status" id="resultStatus"></div>
-    <div class="result-breakdown">
-      <div class="result-stat">Correct: <span id="resCorrect"></span></div>
-      <div class="result-stat">Wrong: <span id="resWrong"></span></div>
-      <div class="result-stat">Total: <span id="resTotal"></span></div>
-    </div>
-    <div style="margin-top:28px;"><button class="start-btn" style="max-width:220px;margin:0 auto;display:block;" onclick="resetTest()">Try Again</button></div>
-  </div>
-</div>
+<!-- PARSER — must load before the subject data files -->
+<script src="js/parser.js"></script>
 
-<div class="page" id="page-notes">
-  <div class="page-header"><div class="page-title">Study Notes</div><div class="page-sub">SELECT A SUBJECT TO READ NOTES</div></div>
-  <div class="notes-grid">
-    <div class="notes-sidebar" id="notesSidebar"></div>
-    <div class="notes-content" id="notesContent">
-      <div class="empty-state"><div class="empty-state-icon">📖</div><p>Select a subject from the left to view notes.</p></div>
-    </div>
-  </div>
-</div>
+<!-- SUBJECT DATA FILES — add a new subject by duplicating one of
+     these, changing id/name, and adding a line for it here. -->
+<script src="data/air-navigation.js"></script>
+<script src="data/radio-navigation.js"></script>
+<script src="data/navigation-instrumentation.js"></script>
+<script src="data/aviation-meteorology.js"></script>
+<script src="data/air-regulations.js"></script>
+<script src="data/aircraft-engines.js"></script>
+<script src="data/technical-specific.js"></script>
+<script src="data/technical-performance.js"></script>
+<script src="data/radio-telephony.js"></script>
+<script src="data/cockpit-study.js"></script>
 
-<div class="page" id="page-airline">
-  <div class="page-header"><div class="page-title">Airline Interview Prep</div><div class="page-sub">HR + TECHNICAL QUESTIONS ASKED BY AIRLINES</div></div>
-  <div class="filter-bar" id="airlineFilter"></div>
-  <div class="qa-list" id="airlineList"></div>
-</div>
+<!-- APPLICATION ENGINE -->
+<script src="js/app.js"></script>
 
-<div class="page" id="page-sim">
-  <div class="page-header"><div class="page-title">Simulator &amp; Type Rating</div><div class="page-sub">ORAL EXAM QUESTIONS &amp; SIM CHECK PREP</div></div>
-  <div class="filter-bar" id="simFilter"></div>
-  <div class="qa-list" id="simList"></div>
-</div>
-</main>
-<script src="data/questions.js"></script>
-<script>
-const SCOPE = { dataPage: "ALL", subjects: "ALL" };
-(function() {
-  const folders = {"MET":"met","NAV":"nav","ALW":"alw","INS":"ins","POF":"pof","OPS":"ops","AGK":"agk"};
-  const wrap = document.getElementById("subjectCards");
-  if (!wrap) return;
-  wrap.innerHTML = Object.entries(SUBJECTS).filter(([code]) => folders[code]).map(([code, label]) => {
-    const count = DATA.filter(d => d.page === "main" && d.subject === code).length;
-    return `<div class="mode-card" onclick="location.href='${folders[code]}/'">
-      <div class="mode-card-icon">📁</div>
-      <div class="mode-card-title">${code} — ${label}</div>
-      <div class="mode-card-desc">Notes, Q&A, flashcards and mock test for ${label}.</div>
-      <div class="mode-card-count">${count} questions</div>
-    </div>`;
-  }).join("");
-})();
-</script>
-<script src="data/app.js"></script>
 </body>
 </html>
