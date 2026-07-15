@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Simulator & Type Rating — Cockpit Study</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../data/style.css" />
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-brand">
+    <div class="brand-icon">✈</div>
+    <div class="brand-name">Cockpit Study</div>
+    <div class="brand-tag">CPL / ATPL</div>
+  </div>
+  <div class="topbar-right">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="globalSearch" placeholder="Search questions…" oninput="handleSearch(this.value)" />
+    </div>
+    <div class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+      <span class="theme-label" id="themeLabel">DARK</span>
+      <div class="toggle-track">
+        <div class="toggle-thumb"></div>
+        <div class="toggle-icons"><span>🌙</span><span>☀️</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+<nav class="nav">
+  <button class="nav-btn active" onclick="goPage('dashboard', this)"><span class="nav-icon">🏠</span> Overview</button>
+  <button class="nav-btn" onclick="goPage('sim', this)"><span class="nav-icon">🎮</span> Q&A Bank</button>
+</nav>
+<main class="main">
+<div class="page search-results-page" id="page-search">
+  <div class="page-header"><div class="page-title">Search Results</div><div class="search-result-count" id="searchCount"></div></div>
+  <div class="qa-list" id="searchList"></div>
+</div>
+<div class="page active" id="page-dashboard">
+  <div class="dash-header"><div class="dash-title">Simulator &amp; Type Rating</div><div class="dash-sub">ORAL EXAM QUESTIONS &amp; SIM CHECK PREP</div></div>
+  <div class="dash-stats"><div class="stat-card"><div class="stat-label">Questions</div><div class="stat-value" id="statTotal">0</div><div class="stat-sub">sim / type rating Q&amp;A</div></div></div>
+  <div class="mode-cards"><div class="mode-card" onclick="goPage('sim',document.querySelector('[onclick*=\'sim\']'))"><div class="mode-card-icon">🎮</div><div class="mode-card-title">Q&amp;A Bank</div><div class="mode-card-desc">Simulator checks, type rating prep, oral exam questions.</div><div class="mode-card-count" id="mcSim"></div></div></div>
+  <div style="margin-top:28px;"><a href="../" style="font-family:var(--mono);font-size:12px;color:var(--text-muted);text-decoration:none;">← Back to Hub</a></div>
+</div>
+
+<div class="page" id="page-sim">
+  <div class="page-header"><div class="page-title">Simulator &amp; Type Rating</div><div class="page-sub">ORAL EXAM QUESTIONS &amp; SIM CHECK PREP</div></div>
+  <div class="filter-bar" id="simFilter"></div>
+  <div class="qa-list" id="simList"></div>
+</div>
+</main>
+<script src="../data/questions.js"></script>
+<script>
+const SCOPE = { dataPage: "sim", subjects: "ALL" };
+</script>
+<script src="../data/app.js"></script>
+</body>
+</html>

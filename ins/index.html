@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Instruments — Cockpit Study</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../data/style.css" />
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-brand">
+    <div class="brand-icon">✈</div>
+    <div class="brand-name">Cockpit Study</div>
+    <div class="brand-tag">CPL / ATPL</div>
+  </div>
+  <div class="topbar-right">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="globalSearch" placeholder="Search questions…" oninput="handleSearch(this.value)" />
+    </div>
+    <div class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+      <span class="theme-label" id="themeLabel">DARK</span>
+      <div class="toggle-track">
+        <div class="toggle-thumb"></div>
+        <div class="toggle-icons"><span>🌙</span><span>☀️</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+<nav class="nav">
+  <button class="nav-btn active" onclick="goPage('dashboard', this)"><span class="nav-icon">🏠</span> Overview</button>
+  <button class="nav-btn" onclick="goPage('notes', this)"><span class="nav-icon">📚</span> Notes</button>
+  <button class="nav-btn" onclick="goPage('qa', this)"><span class="nav-icon">❓</span> Q&A Bank</button>
+  <button class="nav-btn" onclick="goPage('flash', this)"><span class="nav-icon">🃏</span> Flashcards</button>
+  <button class="nav-btn" onclick="goPage('test', this)"><span class="nav-icon">📝</span> Mock Test</button>
+</nav>
+<main class="main">
+<div class="page search-results-page" id="page-search">
+  <div class="page-header"><div class="page-title">Search Results</div><div class="search-result-count" id="searchCount"></div></div>
+  <div class="qa-list" id="searchList"></div>
+</div>
+<div class="page active" id="page-dashboard">
+  <div class="dash-header"><div class="dash-title">Instruments</div><div class="dash-sub">INS — SUBJECT STUDY PAGE</div></div>
+  <div class="dash-stats">
+    <div class="stat-card"><div class="stat-label">Questions</div><div class="stat-value" id="statTotal">0</div><div class="stat-sub">in this subject</div></div>
+    <div class="stat-card"><div class="stat-label">MCQ Pool</div><div class="stat-value" id="mcTest">0</div><div class="stat-sub">mock test questions</div></div>
+    <div class="stat-card"><div class="stat-label">Flashcards Known</div><div class="stat-value" id="statKnown">0</div><div class="stat-sub">this session</div></div>
+    <div class="stat-card"><div class="stat-label">Tests Taken</div><div class="stat-value" id="statTests">0</div><div class="stat-sub">this session</div></div>
+  </div>
+  <div class="mode-cards">
+    <div class="mode-card" onclick="goPage('notes',document.querySelector('[onclick*=\'notes\']'))"><div class="mode-card-icon">📚</div><div class="mode-card-title">Study Notes</div><div class="mode-card-desc">Detailed notes for Instruments.</div></div>
+    <div class="mode-card" onclick="goPage('qa',document.querySelector('[onclick*=\'qa\']'))"><div class="mode-card-icon">❓</div><div class="mode-card-title">Q&amp;A Bank</div><div class="mode-card-desc">Browse questions with full answers.</div><div class="mode-card-count" id="mcQa"></div></div>
+    <div class="mode-card" onclick="goPage('flash',document.querySelector('[onclick*=\'flash\']'))"><div class="mode-card-icon">🃏</div><div class="mode-card-title">Flashcards</div><div class="mode-card-desc">Flip-card study mode.</div><div class="mode-card-count" id="mcFlash"></div></div>
+    <div class="mode-card" onclick="goPage('test',document.querySelector('[onclick*=\'test\']'))"><div class="mode-card-icon">📝</div><div class="mode-card-title">Mock Test</div><div class="mode-card-desc">Timed MCQ practice exam.</div></div>
+  </div>
+  <div style="margin-top:28px;"><a href="../" style="font-family:var(--mono);font-size:12px;color:var(--text-muted);text-decoration:none;">← Back to Hub</a></div>
+</div>
+
+<div class="page" id="page-notes">
+  <div class="page-header"><div class="page-title">Study Notes</div><div class="page-sub">SELECT A SUBJECT TO READ NOTES</div></div>
+  <div class="notes-grid">
+    <div class="notes-sidebar" id="notesSidebar"></div>
+    <div class="notes-content" id="notesContent">
+      <div class="empty-state"><div class="empty-state-icon">📖</div><p>Select a subject from the left to view notes.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-qa">
+  <div class="page-header"><div class="page-title">Q&amp;A Bank</div><div class="page-sub">CLICK A QUESTION TO REVEAL THE ANSWER</div></div>
+  <div class="filter-bar" id="qaFilter"></div>
+  <div class="qa-list" id="qaList"></div>
+</div>
+
+<div class="page" id="page-flash">
+  <div class="page-header"><div class="page-title">Flashcards</div><div class="page-sub">CLICK THE CARD TO FLIP IT</div></div>
+  <div class="flash-controls">
+    <div class="filter-bar" id="flashFilter" style="margin-bottom:0;"></div>
+    <div class="flash-progress-text" id="flashProgressText"></div>
+  </div>
+  <div class="flash-arena">
+    <div class="flash-progress-bar"><div class="flash-progress-fill" id="flashBar"></div></div>
+    <div class="flash-card-wrap" onclick="flipCard()">
+      <div class="flash-card" id="flashCard">
+        <div class="flash-face flash-front">
+          <div class="flash-subject-badge" id="flashSubBadge"></div>
+          <div class="flash-label">Question</div>
+          <div class="flash-text" id="flashQ"></div>
+          <div class="flash-tap-hint">tap to reveal answer</div>
+        </div>
+        <div class="flash-face flash-back">
+          <div class="flash-label">Answer</div>
+          <div class="flash-answer-text" id="flashA"></div>
+        </div>
+      </div>
+    </div>
+    <div class="flash-actions">
+      <button class="flash-btn flash-btn-again" onclick="markCard(false)">↩ Review Again</button>
+      <button class="flash-btn flash-btn-next" onclick="nextCard()">Skip →</button>
+      <button class="flash-btn flash-btn-known" onclick="markCard(true)">✓ Known</button>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-test">
+  <div class="page-header"><div class="page-title">Mock Test</div><div class="page-sub">TIMED MCQ PRACTICE EXAM</div></div>
+  <div class="test-setup" id="testSetup">
+    <h2>Configure Test</h2>
+    <div class="form-row"><label class="form-label">Subject</label><select class="form-select" id="testSubjectSelect"></select></div>
+    <div class="form-row"><label class="form-label">Number of Questions</label>
+      <select class="form-select" id="testNumQ">
+        <option value="5">5 questions</option><option value="10" selected>10 questions</option>
+        <option value="20">20 questions</option><option value="all">All available</option>
+      </select>
+    </div>
+    <div class="form-row"><label class="form-label">Time per Question (seconds)</label>
+      <select class="form-select" id="testTimeQ">
+        <option value="0">No timer</option><option value="30">30 seconds</option>
+        <option value="60" selected>60 seconds</option><option value="90">90 seconds</option><option value="120">2 minutes</option>
+      </select>
+    </div>
+    <button class="start-btn" onclick="startTest()">Start Test →</button>
+  </div>
+  <div class="test-running" id="testRunning">
+    <div class="test-header"><div class="test-meta" id="testMeta"></div><div class="test-timer" id="testTimer"></div></div>
+    <div class="test-progress-bar"><div class="test-progress-fill" id="testBar"></div></div>
+    <div class="test-question-card">
+      <div class="test-qnum" id="testQNum"></div><div class="test-qtext" id="testQText"></div>
+      <div class="test-options" id="testOptions"></div><div class="test-explanation" id="testExplanation"></div>
+    </div>
+    <div class="test-nav">
+      <button class="test-nav-btn" onclick="endTestEarly()">End Test</button>
+      <button class="test-nav-btn primary" id="testNextBtn" onclick="nextTestQ()" disabled>Next →</button>
+    </div>
+  </div>
+  <div class="test-result" id="testResult">
+    <div class="result-score" id="resultScore"></div><div class="result-label">SCORE</div>
+    <div class="result-status" id="resultStatus"></div>
+    <div class="result-breakdown">
+      <div class="result-stat">Correct: <span id="resCorrect"></span></div>
+      <div class="result-stat">Wrong: <span id="resWrong"></span></div>
+      <div class="result-stat">Total: <span id="resTotal"></span></div>
+    </div>
+    <div style="margin-top:28px;"><button class="start-btn" style="max-width:220px;margin:0 auto;display:block;" onclick="resetTest()">Try Again</button></div>
+  </div>
+</div>
+</main>
+<script src="../data/questions.js"></script>
+<script>
+const SCOPE = { dataPage: "main", subjects: ["INS"] };
+</script>
+<script src="../data/app.js"></script>
+</body>
+</html>
